@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chill Guy 측정기</title>
+  <style>
+    /* 전체 페이지 스타일 */
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background: #e8f5e9; /* 연한 민트 그린 배경 */
+      color: #2e7d32; /* 진한 녹색 텍스트 */
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      height: fit-content;
+    }
+
+    /* 컨테이너: 모바일 화면 중앙 정렬 */
+    #quiz-container, #result {
+      max-width: 430px; /* 아이폰 16 너비로 변경 */
+      width: calc(100% - 32px); /* 패딩을 고려한 전체 너비 */
+      margin: 20px auto;
+      padding: 20px 16px;
+      background: #f1f8e9; /* 매우 연한 연두색 배경 */
+      border: 2px solid #aed581; /* 파스텔 연두색 테두리 */
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      box-sizing: border-box; /* 패딩을 너비에 포함 */
+    }
+
+    /* 질문 텍스트 */
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    /* 질문 이미지 컨테이너 수정 */
+    .question-image {
+      width: 100%;
+      aspect-ratio: 1 / 1; /* 정사각형 비율 */
+      margin: 20px 0;
+      background-color: #dcedc8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 보기 버튼 */
+    .option {
+      display: block;
+      margin: 10px 0;
+      padding: 16px;
+      background: #dcedc8;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      text-align: left;
+      color: #33691e;
+    }
+    .option:hover {
+      background: #c5e1a5; /* 호버 시 약간 진한 연두색 */
+    }
+
+    /* 결과 창 */
+    #result {
+      display: none;
+      max-width: 430px;
+      width: calc(100% - 32px);
+      margin: 20px auto;
+      padding: 24px 16px;
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    .result-title {
+      font-size: 24px;
+      color: #2e7d32;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* 결과 이미지 컨테이너 수정 */
+    .result-image {
+      width: 100%;
+      aspect-ratio: 1 / 1; /* 정사각형 비율 */
+      margin: 20px 0;
+      background-color: #dcedc8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-button {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #aed581;
+      color: #33691e;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .result-button:hover {
+      background: #c5e1a5;
+    }
+
+    .share-button {
+      margin-top: 8px;
+      background: #81c784; /* 약간 다른 녹색 계열로 구분 */
+    }
+
+    .share-button:hover {
+      background: #a5d6a7;
+    }
+
+    /* 시작 화면 스타일 */
+    #start-container {
+      width: 100%;
+      height: 100vh;
+      background-image: url('background.webp'); /* 배경 이미지 추가 */
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #fff; /* 배경 이미지에 따라 조절 필요 */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-top: 40px;
+    }
+
+    .start-button {
+      background: #aed581;
+      color: #33691e;
+      border: none;
+      padding: 15px 40px;
+      font-size: 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-bottom: 40px;
+      transition: background 0.3s ease;
+    }
+
+    .start-button:hover {
+      background: #c5e1a5;
+    }
+
+    /* 기존 컨테이너 수정 */
+    #quiz-container {
+      display: none;
+      max-width: 430px;
+      width: calc(100% - 32px);
+      margin: 20px auto;
+      padding: 24px 16px;
+      background: #f1f8e9;
+      border: 2px solid #aed581;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+
+    /* 탑바 스타일 추가 */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: rgba(241, 248, 233, 0.95);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 1000;
+      border-bottom: 1px solid #aed581;
+    }
+
+    .language-switcher {
+      display: flex;
+      gap: 8px;
+      font-size: 14px;
+      color: #33691e;
+    }
+
+    .language-btn {
+      background: none;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: #33691e;
+      opacity: 0.5;
+      font-size: 14px;
+    }
+
+    .language-btn.active {
+      opacity: 1;
+      font-weight: bold;
+    }
+
+    /* 기존 컨테이너들의 상단 여백 조정 */
+    #start-container {
+      padding-top: 60px;
+    }
+
+    #quiz-container, #result {
+      margin-top: 60px;
+    }
+
+    /* 점수 표시 스타일 추가 */
+    .score-text {
+      font-size: 14px;
+      color: #33691e;
+      text-align: center;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <button id="musicToggle" class="music-button">
+        🔊
+      </button>
+    </div>
+    <div class="language-switcher">
+      <button class="language-btn active" onclick="changeLanguage('ko')" data-lang="ko">ko</button>
+      |
+      <button class="language-btn" onclick="changeLanguage('en')" data-lang="en">en</button>
+    </div>
+  </div>
+
+  <audio id="bgm" loop>
+    <source src="background.mp3" type="audio/mp3">
+  </audio>
+
+  <div id="start-container">
+    <h1 class="title">Chill Guy 측정기</h1>
+    <button class="start-button" onclick="startQuiz()">측정</button>
+  </div>
+
+  <div id="quiz-container">
+    <!-- 질문과 보기 -->
+  </div>
+
+  <div id="result">
+    <h2 class="result-title"><span id="result-text"></span></h2>
+    <div class="result-image">
+      <!-- 결과 이미지 들어갈 자리 -->
+    </div>
+    <button class="result-button" onclick="restartQuiz()">다시 시작하기</button>
+    <button class="result-button share-button" onclick="saveAsImage()">결과 저장하기</button>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+  <script>
+    // 언어 데이터 추가
+    const translations = {
+      ko: {
+        title: 'Chill Guy 측정기',
+        startButton: '측정',
+        restartButton: '다시 시작하기',
+        saveButton: '결과 저장하기',
+        questions: [
+          {
+            question: "당신은 선풍기 바람이 직방으로 오지 않아 땀이 흐르고 있습니다. 어떻게 대처하시겠습니까?",
+            image: "q1.webp",
+            options: [
+              { text: "그냥 더운 건 자연의 일부라고 생각하며 땀을 흘린다. 이것이 여름이다.", score: 3 },
+              { text: "선풍기 근처로 이동하며 자연스럽게 바람을 받는다. 마치 우주의 흐름처럼.", score: 2 },
+              { text: "가까운 부채를 찾아들고 천천히 부채질한다. 천천히.", score: 1 },
+              { text: "땀을 닦으며 창문을 열고 밖을 본다. 멍 때리는 게 최고다.", score: 0 },
+            ],
+          },
+          {
+            question: "친구가 약속 시간에 30분이나 늦었습니다. 당신의 반응은?",
+            image: "q2.webp",
+            options: [
+              { text: "괜찮아, 나도 방금 왔어~ (사실 제시간에 도착했다)", score: 3 },
+              { text: "기다리는 동안 여유롭게 음악을 듣고 있었어", score: 2 },
+              { text: "커피 한 잔 마시면서 기다리고 있었어", score: 1 },
+              { text: "다음부턴 일찍 와줬으면 좋겠다~ (웃으며)", score: 0 },
+            ],
+          },
+          {
+            question: "일이 너무 많아 야근을 해야 할 것 같습니다. 어떻게 하시겠습니까?",
+            image: "q3.webp",
+            options: [
+              { text: "내일의 나에게 선물을 주자. 오늘은 집에 간다", score: 3 },
+              { text: "할 수 있는 만큼만 하고 가자. 건강이 최고다", score: 2 },
+              { text: "조금만 더 하다가 가야겠다. 스트레스 받지 말자", score: 1 },
+              { text: "빨리 끝내고 가자. 열심히 하면 된다", score: 0 },
+            ],
+          },
+          {
+            question: "주말에 갑자기 약속이 취소되었습니다. 당신은?",
+            image: "q4.webp",
+            options: [
+              { text: "오히려 좋아. 집이 최고야", score: 3 },
+              { text: "좋은 기회군. 나만의 시간을 가지자", score: 2 },
+              { text: "다른 친구를 만날까? 아니야, 그냥 쉬자", score: 1 },
+              { text: "다음을 기약하며 넷플릭스를 본다", score: 0 },
+            ],
+          },
+          {
+            question: "길가다가 발에 껌이 붙었습니다. 당신의 반응은?",
+            image: "q5.webp",
+            options: [
+              { text: "이것도 인생의 일부지 뭐~ 천천히 떼면 되지", score: 3 },
+              { text: "귀찮네~ 그래도 어쩔 수 없지", score: 2 },
+              { text: "근처 편의점에서 물티슈를 사자", score: 1 },
+              { text: "아... 짜증나네. 빨리 떼야겠다", score: 0 },
+            ],
+          },
+          {
+            question: "퇴근길에 엄청난 traffic jam에 걸렸습니다. 당신은?",
+            image: "q6.webp",
+            options: [
+              { text: "차가 막히네~ 음악이나 들으면서 가자", score: 3 },
+              { text: "이 시간에 명상이나 해볼까?", score: 2 },
+              { text: "우회도로를 찾아보자. 천천히", score: 1 },
+              { text: "다음부턴 이 시간은 피해서 가야지", score: 0 },
+            ],
+          },
+          {
+            question: "마지막 질문입니다. 당신의 인생 모토는?",
+            image: "q7.webp",
+            options: [
+              { text: "인생은 흘러가는 대로. 모든 게 Fine해", score: 3 },
+              { text: "천천히 가도 괜찮아. 결국 다 잘될 거야", score: 2 },
+              { text: "긍정적으로 생각하면 긍정적인 일이 생겨", score: 1 },
+              { text: "열심히 살자. 그래도 여유롭게", score: 0 },
+            ],
+          },
+        ],
+        results: {
+          score21: {
+            text: "✨ 세상 모든 게 Fine해. 네 주변은 언제나 Chill한 에너지로 가득해",
+            image: "score21.webp"
+          },
+          score20: {
+            text: "🌊 평화로운 흐름 그 자체. 네가 있는 곳이 바로 Chill Zone이야",
+            image: "score20.webp"
+          },
+          score18: {
+            text: "🧘‍♂️ 완벽하진 않아도 Fine해. 네 안의 평화가 곧 Chill이니까",
+            image: "score18.webp"
+          },
+          score16: {
+            text: "🍃 자유롭게 흘러가는 중. Everything's Chill, Everything's Fine",
+            image: "score16.webp"
+          },
+          score13: {
+            text: "👀 천천히 바라보는 네 방식이 Fine해. 그게 바로 진정한 Chill",
+            image: "score13.webp"
+          },
+          score10: {
+            text: "⚖️ 밸런스의 달인. 어떤 순간에도 Chill하게 받아들여",
+            image: "score10.webp"
+          },
+          score7: {
+            text: "🎮 여유로운 미소가 매력이야. Keep Calm and Stay Chill",
+            image: "score7.webp"
+          },
+          score4: {
+            text: "🤔 깊은 생각도 Fine해. 그 속에서 찾은 평화가 너만의 Chill",
+            image: "score4.webp"
+          },
+          score0: {
+            text: "⚡ 열정 가득한 게 Fine해. 그래도 마음만은 언제나 Chill",
+            image: "score0.webp"
+          }
+        }
+      },
+      en: {
+        title: 'Chill Guy Test',
+        startButton: 'Start',
+        restartButton: 'Restart',
+        saveButton: 'Save Result',
+        questions: [
+          {
+            question: "The fan isn't blowing directly at you and you're sweating. What do you do?",
+            image: "q1.webp",
+            options: [
+              { text: "Just sweat it out. Heat is part of nature. This is summer.", score: 3 },
+              { text: "Move closer to the fan and let the wind blow naturally. It's like the flow of the universe.", score: 2 },
+              { text: "Find a nearby fan and gently fan yourself. Slowly.", score: 1 },
+              { text: "Wipe your face and open the window to see outside. It's the best.", score: 0 },
+            ],
+          },
+          {
+            question: "Your clothes got wet from the ice drink on the beach. What do you do?",
+            image: "q2.webp",
+            options: [
+              { text: "Just accept it as a memory. The clothes will dry by themselves.", score: 3 },
+              { text: "Don't worry about it and drink more. I'm thirsty.", score: 2 },
+              { text: "Dry the wet clothes by feeling the breeze. The beach is usually like this.", score: 1 },
+              { text: "Carefully unfold the clothes and enjoy the wet state. Everything is fine.", score: 0 },
+            ],
+          },
+          {
+            question: "Your sunglasses broke suddenly. It's very sunny. What do you do?",
+            image: "q3.webp",
+            options: [
+              { text: "Hold the broken sunglasses with both hands and style it. Imperfection is also a style.", score: 3 },
+              { text: "Put on the sunglasses and enjoy the sun's warmth.", score: 2 },
+              { text: "Find a shady spot and walk slowly. There's always a shadow.", score: 1 },
+              { text: "Look at the broken sunglasses and say 'It's possible'.", score: 0 },
+            ],
+          },
+          {
+            question: "Sauce got on your clothes while eating pizza. What do you do?",
+            image: "q4.webp",
+            options: [
+              { text: "Carefully inspect the sauce on your clothes. And think it's the soul of pizza.", score: 3 },
+              { text: "Carefully fold the clothes and eat it. Pizza comes first.", score: 2 },
+              { text: "Wipe off the sauce on your clothes gently and organize the situation.", score: 1 },
+              { text: "Wipe off the sauce on your clothes with your hand and use a tissue.", score: 0 },
+            ],
+          },
+          {
+            question: "Your friend lost a game and is angry. What do you do?",
+            image: "q5.webp",
+            options: [
+              { text: "Just watch the friend's anger for a moment and smile. 'Maybe you'll win the next game.'", score: 3 },
+              { text: "Give the friend a drink and avoid talking about the game. 'It's okay, it's okay.'", score: 2 },
+              { text: "Just wait quietly on the side until the anger fades away.", score: 1 },
+              { text: "Change the topic. 'What about dinner tonight?'", score: 0 },
+            ],
+          },
+          {
+            question: "You were holding your phone and charging it on the bed, but the charger broke. What do you do?",
+            image: "q6.webp",
+            options: [
+              { text: "Just look at the ceiling. It's just a peaceful moment.", score: 3 },
+              { text: "Accept that the charger broke as part of fate and sleep.", score: 2 },
+              { text: "Continue to hold the charger and waste time.", score: 1 },
+              { text: "Observe the broken charger and think 'When did it start to break?'", score: 0 },
+            ],
+          },
+          {
+            question: "It's raining and you lost your umbrella. What do you do?",
+            image: "q7.webp",
+            options: [
+              { text: "Just walk leisurely while getting wet. It's okay if it gets wet. Today is special.", score: 3 },
+              { text: "Hide from the rain in a nearby place and just look away for a moment.", score: 2 },
+              { text: "Cover your head with your hand and walk slowly. The rain might be a blessing.", score: 1 },
+              { text: "Listen to the sound of rain and look at the sky. Everything is quiet.", score: 0 },
+            ],
+          },
+        ],
+        results: {
+          score21: {
+            text: "✨ Everything's Fine around you. Your presence brings the ultimate Chill vibes",
+            image: "score21.webp"
+          },
+          score20: {
+            text: "🌊 Pure peace in motion. Wherever you are becomes the Chill Zone",
+            image: "score20.webp"
+          },
+          score18: {
+            text: "🧘‍♂️ Perfectly imperfect and Fine. Your inner peace is pure Chill",
+            image: "score18.webp"
+          },
+          score16: {
+            text: "🍃 Going with the flow. Everything's Chill, Everything's Fine",
+            image: "score16.webp"
+          },
+          score13: {
+            text: "👀 Taking it slow is Fine. That's what makes you genuinely Chill",
+            image: "score13.webp"
+          },
+          score10: {
+            text: "⚖️ Master of balance. Keeping it Chill in every moment",
+            image: "score10.webp"
+          },
+          score7: {
+            text: "🎮 That peaceful smile says it all. Keep Calm and Stay Chill",
+            image: "score7.webp"
+          },
+          score4: {
+            text: "🤔 Deep thoughts are Fine. Finding your Chill in contemplation",
+            image: "score4.webp"
+          },
+          score0: {
+            text: "⚡ Passionate soul with a Chill mind. That's perfectly Fine",
+            image: "score0.webp"
+          }
+        }
+      }
+    };
+
+    let currentLang = 'ko';
+
+    // 언어 변경 함수
+    function changeLanguage(lang) {
+      currentLang = lang;
+      
+      // 버튼 활성화 상태 변경
+      document.querySelectorAll('.language-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      
+      // 현재 화면 상태에 따라 텍스트 업데이트
+      updateTexts();
+    }
+
+    // 텍스트 업데이트 함수
+    function updateTexts() {
+      const t = translations[currentLang];
+      
+      // 시작 화면 텍스트 업데이트
+      document.querySelector('.title').textContent = t.title;
+      document.querySelector('.start-button').textContent = t.startButton;
+      
+      // 현재 보이는 화면에 따라 텍스트 업데이트
+      if (quizContainer.style.display === 'block') {
+        renderQuestion(); // 현재 질문 다시 렌더링
+      } else if (resultContainer.style.display === 'block') {
+        showResult(); // 결과 다시 렌더링
+      }
+      
+      // 버튼 텍스트 업데이트
+      document.querySelectorAll('.result-button').forEach(btn => {
+        if (btn.onclick.toString().includes('restartQuiz')) {
+          btn.textContent = t.restartButton;
+        } else if (btn.onclick.toString().includes('saveAsImage')) {
+          btn.textContent = t.saveButton;
+        }
+      });
+    }
+
+    let currentQuestionIndex = 0;
+    let totalScore = 0;
+
+    const quizContainer = document.getElementById("quiz-container");
+    const resultContainer = document.getElementById("result");
+    const resultText = document.getElementById("result-text");
+
+    // 배열 섞기 함수
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // 질문 화면 렌더링
+    function renderQuestion() {
+      const currentQuestion = translations[currentLang].questions[currentQuestionIndex];
+      const shuffledOptions = shuffleArray([...currentQuestion.options]);
+      
+      const questionNumber = currentQuestionIndex === translations[currentLang].questions.length - 1 
+        ? 'Chill.' 
+        : `${currentQuestionIndex + 1}.`;
+      
+      quizContainer.innerHTML = `
+        <div class="question">
+          ${questionNumber} ${currentQuestion.question}
+        </div>
+        <div class="question-image">
+          <!-- 이미지가 있다면 여기에 추가 -->
+        </div>
+        ${shuffledOptions
+          .map(
+            (option) => `
+            <button class="option" onclick="selectOption(${option.score})">${option.text}</button>
+          `
+          )
+          .join("")}
+      `;
+    }
+
+    // 옵션 선택
+    function selectOption(score) {
+      totalScore += score;
+      currentQuestionIndex++;
+      if (currentQuestionIndex < translations[currentLang].questions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    // 결과 보여주기
+    function showResult() {
+      quizContainer.style.display = "none";
+      let resultMessage = "";
+      const t = translations[currentLang];
+      
+      if (totalScore >= 21) {
+        resultMessage = t.results.score21.text;
+      } else if (totalScore === 20) {
+        resultMessage = t.results.score20.text;
+      } else if (totalScore >= 18) {
+        resultMessage = t.results.score18.text;
+      } else if (totalScore >= 16) {
+        resultMessage = t.results.score16.text;
+      } else if (totalScore >= 13) {
+        resultMessage = t.results.score13.text;
+      } else if (totalScore >= 10) {
+        resultMessage = t.results.score10.text;
+      } else if (totalScore >= 7) {
+        resultMessage = t.results.score7.text;
+      } else if (totalScore >= 4) {
+        resultMessage = t.results.score4.text;
+      } else {
+        resultMessage = t.results.score0.text;
+      }
+      
+      resultContainer.innerHTML = `
+        <div class="score-text">${currentLang === 'ko' ? `너의 점수는 ${totalScore}점이야.` : `Your score is ${totalScore}.`}</div>
+        <h2 class="result-title">${resultMessage}</h2>
+        <div class="result-image">
+          <!-- 결과 이미지 들어갈 자리 -->
+        </div>
+        <button class="result-button" onclick="restartQuiz()">${t.restartButton}</button>
+        <button class="result-button share-button" onclick="saveAsImage()">${t.saveButton}</button>
+      `;
+      
+      resultContainer.style.display = "block";
+    }
+
+    // 퀴즈 다시 시작
+    function restartQuiz() {
+      currentQuestionIndex = 0;
+      totalScore = 0;
+      resultContainer.style.display = "none";
+      document.getElementById('start-container').style.display = "flex";
+      quizContainer.style.display = "none";
+    }
+
+    // 퀴즈 시작 함수 수정
+    function startQuiz() {
+      document.getElementById('start-container').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'block';
+      // 현재 언어의 질문들을 섞기
+      translations[currentLang].questions = shuffleArray([...translations[currentLang].questions]);
+      currentQuestionIndex = 0;
+      totalScore = 0;
+      renderQuestion();
+    }
+
+    // Instagram 공유 함수 추가
+    function shareToInstagram() {
+      // Instagram 공유 로직 구현
+      // 실제 구현시에는 웹 공유 API나 딥링크를 사용해야 합니다
+      alert('Instagram 공유 기능은 추후 구현될 예정입니다.');
+    }
+
+    // 이미지 저장 함수 추가
+    async function saveAsImage() {
+      try {
+        // 저장 버튼 숨기기 (이미지에 포함되지 않도록)
+        const buttons = document.querySelectorAll('.result-button');
+        buttons.forEach(button => button.style.display = 'none');
+
+        // 결과 div를 이미지로 변환
+        const element = document.getElementById('result');
+        const canvas = await html2canvas(element, {
+          backgroundColor: '#f1f8e9',
+          scale: 2, // 더 선명한 이미지를 위해 2배 크기로 렌더링
+        });
+
+        // 버튼 다시 보이게 하기
+        buttons.forEach(button => button.style.display = 'block');
+
+        // 이미지 다운로드
+        const link = document.createElement('a');
+        link.download = 'my-chill-result.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error('이미지 저장 중 오류가 발생했습니다:', err);
+        alert('이미지 저장에 실패했습니다. 다시 시도해주세요.');
+      }
+    }
+  </script>
+</body>
+</html>
