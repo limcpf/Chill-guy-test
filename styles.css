@@ -39,29 +39,36 @@
 
 /* 전체 페이지 스타일 */
 body {
-	font-family: "Comic Sans MS", sans-serif;
-	background: var(--bg-color);
-	color: var(--text-color);
-	margin: 0;
-	min-height: 100vh;
 	display: flex;
-	flex-direction: column; /* 세로 방향으로 요소들을 배치 */
+	flex-direction: column;
+	min-height: 100vh;
+	margin: 0;
+	background: var(--main-bg);
+	color: var(--text-color);
+	font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+		system-ui, Roboto, sans-serif;
 }
 
 /* 메인 컨텐츠 영역 */
 main {
-	flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
+	flex: 1;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 20px 0;
+	width: 100%;
+	min-height: calc(100vh - 120px);
+	background-image: var(--main-bg);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed; /* 스크롤 시 배경 고정 */
 }
 
 /* 컨테이너: 모바일 화면 중앙 정렬 */
 #quiz-container,
 #result {
-	max-width: 430px; /* 아이폰 16 너비로 변경 */
-	width: calc(100% - 32px); /* 패딩을 고려한 전체 너비 */
+	max-width: 430px;
+	width: calc(100% - 32px);
 	margin: 20px auto;
 	padding: 24px 16px;
 	background: var(--container-bg);
@@ -69,7 +76,7 @@ main {
 	border-radius: 10px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	text-align: center;
-	box-sizing: border-box; /* 패딩을 너비에 포함 */
+	box-sizing: border-box;
 }
 
 /* 질문 텍스트 */
@@ -80,11 +87,10 @@ main {
 	line-height: 1.5;
 }
 
-/* 질문 이미지 컨테이너 수정 */
+/* 질문 이미지 컨테이너 */
 .question-image {
 	width: 100%;
-	min-height: calc(100vw * 2.5 / 3); /* 최소 높이를 현재 비율로 설정 */
-	max-height: calc(100vw * 1.2); /* 너무 길어지지 않도록 제한 */
+	aspect-ratio: 4 / 3; /* 4:3 비율 유지 */
 	margin: 20px 0;
 	background-color: var(--option-bg);
 	border-radius: 8px;
@@ -98,7 +104,7 @@ main {
 .question-image img {
 	width: 100%;
 	height: 100%;
-	object-fit: contain; /* cover에서 contain으로 변경하여 이미지가 잘리지 않도록 */
+	object-fit: cover;
 	border-radius: 8px;
 	opacity: 0;
 	transition: opacity 0.3s ease;
@@ -150,11 +156,10 @@ main {
 	text-align: center;
 }
 
-/* 결과 이미지 컨테이너 수정 */
+/* 결과 이미지 컨테이너 */
 .result-image {
 	width: 100%;
-	min-height: calc(100vw * 2.5 / 3);
-	max-height: calc(100vw * 1.2);
+	aspect-ratio: 3 / 4; /* 3:4 비율로 유지 */
 	margin: 20px 0;
 	background-color: var(--option-bg);
 	border-radius: 8px;
@@ -168,7 +173,7 @@ main {
 .result-image img {
 	width: 100%;
 	height: 100%;
-	object-fit: contain;
+	object-fit: cover;
 	border-radius: 8px;
 	opacity: 0;
 	transition: opacity 0.3s ease;
@@ -228,12 +233,21 @@ main {
 	box-sizing: border-box;
 }
 
+/* 제목 컨테이너 스타일 */
+.title-container {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 40px;
+}
+
+/* 제목 스타일 수정 */
 .title {
 	font-size: 32px;
 	font-weight: bold;
-	color: #fff; /* 배경 이미지에 따라 조절 필요 */
+	color: #fff;
 	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-	margin-top: 40px;
+	margin: 0; /* 기존 margin-top 제거 */
 }
 
 .start-button {
@@ -415,4 +429,225 @@ main {
 
 .theme-toggle:hover {
 	opacity: 0.8;
+}
+
+.instagram-share {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.instagram-share i {
+	font-size: 1.2em;
+}
+
+.share-buttons {
+	display: flex;
+	gap: 1rem;
+	justify-content: center;
+	margin-top: 1rem;
+}
+
+.icon-button {
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: 50%;
+	width: 3rem;
+	height: 3rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+}
+
+.icon-button:hover {
+	background-color: rgba(0, 0, 0, 0.1);
+	transform: scale(1.1);
+}
+
+[data-theme="dark"] .icon-button:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 버튼 그룹 스타일 */
+.button-group {
+	display: flex;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.button-group .result-button {
+	flex: 1;
+	margin: 0;
+}
+
+/* 다시 시작하기 버튼 스타일 */
+.button-group .result-button:first-child {
+	background: var(--button-bg);
+	color: var(--button-color);
+}
+
+.button-group .result-button:first-child:hover {
+	background: var(--option-hover);
+}
+
+/* 공유하기 버튼 스타일 */
+.button-group .result-button:last-child {
+	background: #81c784; /* 녹색 계열 */
+	color: white;
+}
+
+.button-group .result-button:last-child:hover {
+	background: #66bb6a; /* 호버 시 약간 더 진한 녹색 */
+}
+
+/* 모달 스타일 */
+.modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+}
+
+.modal-content {
+	background: var(--container-bg);
+	padding: 24px;
+	border-radius: 10px;
+	width: 90%;
+	max-width: 320px;
+	max-height: 80vh; /* 화면 높이의 80%로 제한 */
+	text-align: center;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.modal-content h3 {
+	margin: 0 0 20px 0;
+	color: var(--text-color);
+	font-size: 1.2em;
+	position: sticky;
+	top: 0;
+	background: var(--container-bg);
+}
+
+.share-buttons {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+	margin-bottom: 20px;
+	justify-content: center;
+}
+
+.share-buttons .icon-button {
+	aspect-ratio: 1;
+	padding: 0;
+	border: none;
+	border-radius: 12px;
+	background: var(--option-bg);
+	color: var(--text-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	margin: 0 auto;
+	width: 100%;
+}
+
+.share-buttons .icon-button i {
+	font-size: 1.5em;
+}
+
+.share-buttons .icon-button:hover {
+	background: var(--option-hover);
+	transform: translateY(-3px);
+}
+
+.modal-close {
+	margin-top: 20px;
+	position: sticky;
+	bottom: 0;
+	background: var(--button-bg);
+	width: auto;
+	padding: 12px 32px;
+	border: none;
+	border-radius: 8px;
+	color: var(--button-color);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	font-size: 1em;
+}
+
+.modal-close:hover {
+	background: var(--option-hover);
+	transform: translateY(-2px);
+}
+
+/* 정보 버튼 스타일 */
+.info-button {
+	background: none;
+	border: none;
+	font-size: 24px; /* 크기 키움 */
+	color: #fff; /* 흰색으로 변경 */
+	cursor: pointer;
+	padding: 4px;
+	opacity: 0.9;
+	transition: all 0.3s ease;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 제목과 동일한 그림자 효과 */
+}
+
+.info-button:hover {
+	opacity: 1;
+	transform: scale(1.1);
+}
+
+/* 정보 모달 내용 스타일 */
+.info-text {
+	text-align: left;
+	line-height: 1.6;
+	color: var(--text-color);
+	margin: 20px 0;
+	overflow-y: auto; /* 세로 스크롤 추가 */
+	padding-right: 10px; /* 스크롤바 공간 확보 */
+	flex: 1; /* 남은 공간 모두 차지 */
+}
+
+.info-text p {
+	margin: 12px 0;
+}
+
+.contact-email {
+	text-align: center;
+	font-weight: bold;
+	margin-top: 20px;
+}
+
+/* 스크롤바 스타일링 */
+.info-text::-webkit-scrollbar {
+	width: 8px;
+}
+
+.info-text::-webkit-scrollbar-track {
+	background: var(--container-bg);
+	border-radius: 4px;
+}
+
+.info-text::-webkit-scrollbar-thumb {
+	background: var(--border-color);
+	border-radius: 4px;
+}
+
+.info-text::-webkit-scrollbar-thumb:hover {
+	background: var(--button-bg);
 }

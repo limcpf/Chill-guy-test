@@ -135,6 +135,37 @@ const translations = {
 				image: "score0.webp",
 			},
 		},
+		infoTitle: "About Chill Guy",
+		infoText: {
+			description:
+				"'Chill Guy'는 2024년 초 한국에서 유행하기 시작한 밈으로, 모든 상황에서 여유롭고 평화로운 태도를 보이는 사람을 의미합니다. 이 용어는 영어 'Chill'(여유롭다, 편안하다)과 'Guy'(사람)의 합성어입니다.",
+			origin:
+				"이 밈은 2024년 1월, 한 유튜버의 '칠가이 테스트' 영상이 인기를 얻으면서 시작되었습니다. 이후 SNS에서 빠르게 확산되어 '긍정적이고 여유로운 태도로 살아가는 사람'을 지칭하는 신조어로 자리잡았습니다.",
+			culture:
+				"Chill Guy는 단순히 '여유로운 사람'이 아닌, 현대 사회의 스트레스와 경쟁 속에서도 자신만의 페이스를 유지하며 평화로운 마인드를 가진 사람을 의미합니다. 모든 상황에서 'Fine'하다고 말하며, 긍정적인 에너지를 전파하는 것이 특징입니다.",
+			purpose:
+				"이 테스트는 해당 밈을 재미있게 해석한 팬 콘텐츠입니다. 테스트를 통해 자신의 'Chill' 정도를 재미있게 확인해볼 수 있습니다.",
+			copyright:
+				"만약 저작권 등 문제가 있다고 판단되시면, 아래 이메일로 연락 주시기 바랍니다. 최대한 신속하게 조치하도록 하겠습니다.",
+			email: "📧 daeseong0226@gmail.com",
+		},
+		closeButton: "닫기",
+		shareButton: "공유하기",
+		shareTitle: "공유하기",
+		shareButtons: {
+			instagram: "Instagram Story 공유",
+			twitter: "X에 공유하기",
+			download: "이미지 저장",
+		},
+		shareErrors: {
+			instagramRequired: "Instagram 앱이 필요합니다.",
+			instagramFailed: "Instagram Story 공유에 실패했습니다.",
+			saveFailed: "이미지 저장에 실패했습니다. 다시 시도해주세요.",
+		},
+		musicGuide: {
+			before: "🎵 BGM을 듣고 싶다면",
+			after: "을 눌러주세요",
+		},
 	},
 	en: {
 		title: "Chill Guy Test",
@@ -293,6 +324,37 @@ const translations = {
 				image: "score0.webp",
 			},
 		},
+		infoTitle: "About Chill Guy",
+		infoText: {
+			description:
+				"'Chill Guy' is a meme that became popular in Korea in early 2024, referring to someone who maintains a relaxed and peaceful attitude in all situations. The term combines the English words 'Chill' (relaxed, calm) and 'Guy' (person).",
+			origin:
+				"This meme gained popularity in January 2024 when a YouTuber's 'Chill Guy Test' video went viral. It quickly spread across social media, becoming a new term to describe 'someone who lives with a positive and relaxed attitude.'",
+			culture:
+				"A Chill Guy isn't just someone who's relaxed, but rather someone who maintains their own pace and peaceful mindset despite the stress and competition of modern society.",
+			purpose:
+				"This test is fan content that playfully interprets Chill Guy culture.",
+			copyright:
+				"If you believe there are any copyright issues, please contact us at the email below. We will take appropriate action as quickly as possible.",
+			email: "📧 daeseong0226@gmail.com",
+		},
+		closeButton: "Close",
+		shareButton: "Share",
+		shareTitle: "Share",
+		shareButtons: {
+			instagram: "Share to Instagram Story",
+			twitter: "Share to X",
+			download: "Save Image",
+		},
+		shareErrors: {
+			instagramRequired: "Instagram app is required.",
+			instagramFailed: "Failed to share to Instagram Story.",
+			saveFailed: "Failed to save image. Please try again.",
+		},
+		musicGuide: {
+			before: "🎵 Click",
+			after: "for BGM",
+		},
 	},
 };
 
@@ -315,24 +377,52 @@ function changeLanguage(lang) {
 function updateTexts() {
 	const t = translations[currentLang];
 
-	// 시작 화면 텍스트 업데이트
 	document.querySelector(".title").textContent = t.title;
 	document.querySelector(".start-button").textContent = t.startButton;
 
-	// 현재 보이는 화면에 따라 텍스트 업데이트
 	if (quizContainer.style.display === "block") {
-		renderQuestion(); // 현재 질문 다시 렌더링
+		renderQuestion();
 	} else if (resultContainer.style.display === "block") {
-		showResult(); // 결과 다시 렌더링
+		showResult();
 	}
 
-	// 버튼 텍스트 업데이트
+	// 다시 시작하기 버튼만 업데이트
 	document.querySelectorAll(".result-button").forEach((btn) => {
 		if (btn.onclick.toString().includes("restartQuiz")) {
 			btn.textContent = t.restartButton;
-		} else if (btn.onclick.toString().includes("saveAsImage")) {
-			btn.textContent = t.saveButton;
 		}
+	});
+
+	// 정보 모달 텍스트 업데이트
+	document.querySelector("#infoModal h3").textContent = t.infoTitle;
+	const infoText = document.querySelector(".info-text");
+	infoText.innerHTML = `
+		<p>${t.infoText.description}</p>
+		<p>${t.infoText.origin}</p>
+		<p>${t.infoText.culture}</p>
+		<p>${t.infoText.purpose}</p>
+		<p>${t.infoText.copyright}</p>
+		<p class="contact-email">${t.infoText.email}</p>
+	`;
+	document.querySelector("#infoModal .modal-close").textContent = t.closeButton;
+
+	// 공유 모달 텍스트 업데이트
+	document.querySelector("#shareModal h3").textContent = t.shareTitle;
+	document.querySelectorAll("#shareModal .icon-button").forEach((btn) => {
+		if (btn.onclick.toString().includes("Instagram")) {
+			btn.title = t.shareButtons.instagram;
+		} else if (btn.onclick.toString().includes("shareToX")) {
+			btn.title = t.shareButtons.twitter;
+		} else if (btn.onclick.toString().includes("saveImage")) {
+			btn.title = t.shareButtons.download;
+		}
+	});
+	document.querySelector("#shareModal .modal-close").textContent =
+		t.closeButton;
+
+	// BGM 가이드 텍스트 업데이트
+	document.querySelectorAll(".music-guide").forEach((guide, index) => {
+		guide.textContent = index === 0 ? t.musicGuide.before : t.musicGuide.after;
 	});
 }
 
@@ -464,9 +554,10 @@ function showResult() {
       `
 					: ""
 			}
-      <button class="result-button" onclick="restartQuiz()">${t.restartButton}</button>
-      <button class="result-button share-button" onclick="saveAsImage()">${t.saveButton}</button>
-      <button class="result-button share-button" onclick="shareToInstagramStory()">Instagram Story 공유</button>
+      <div class="button-group">
+        <button class="result-button" onclick="restartQuiz()">${t.restartButton}</button>
+        <button class="result-button" onclick="openShareModal()">${t.shareButton}</button>
+      </div>
     `;
 
 	resultContainer.style.display = "block";
@@ -482,7 +573,7 @@ function restartQuiz() {
 }
 
 // 페이지 로드 시 초기 설정
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
 	// 초기 화면 설정
 	document.getElementById("quiz-container").style.display = "none";
 	document.getElementById("result").style.display = "none";
@@ -501,6 +592,9 @@ window.addEventListener("load", () => {
 		},
 		{ once: true },
 	);
+
+	// 초기 언어 설정에 따른 텍스트 업데이트
+	updateTexts();
 });
 
 // 퀴즈 시작 함수 수정
@@ -525,7 +619,7 @@ function shareToInstagram() {
 }
 
 // 이미지 저장 함수 추가
-async function saveAsImage() {
+async function saveImage() {
 	try {
 		// 저장 버튼 숨기기 (이미지에 포함되지 않도록)
 		const buttons = document.querySelectorAll(".result-button");
@@ -548,73 +642,70 @@ async function saveAsImage() {
 		link.click();
 	} catch (err) {
 		console.error("이미지 저장 중 오류가 발생했습니다:", err);
-		alert("이미지 저장에 실패했습니다. 다시 시도해주세요.");
+		alert(translations[currentLang].shareErrors.saveFailed);
 	}
 }
 
-// Instagram 스토리 공유 함수 추가
+// Instagram Story 공유 함수
 async function shareToInstagramStory() {
 	try {
-		// 저장 버튼들 임시로 숨기기
-		const buttons = document.querySelectorAll(".result-button");
-		buttons.forEach((button) => (button.style.display = "none"));
+		const resultElement = document.getElementById("result");
 
-		// 결과를 이미지로 변환
-		const element = document.getElementById("result");
-		const canvas = await html2canvas(element, {
-			backgroundColor: "#f1f8e9",
+		// QR 코드 생성을 위한 임시 div 생성
+		const qrDiv = document.createElement("div");
+		qrDiv.style.position = "absolute";
+		qrDiv.style.right = "20px";
+		qrDiv.style.bottom = "20px";
+		qrDiv.style.width = "80px";
+		qrDiv.style.height = "80px";
+		qrDiv.style.backgroundColor = "white";
+		qrDiv.style.padding = "5px";
+		qrDiv.style.borderRadius = "8px";
+
+		// QR 코드 생성
+		new QRCode(qrDiv, {
+			text: "https://chill-guy.limcpf.com",
+			width: 80,
+			height: 80,
+			colorDark: "#000000",
+			colorLight: "#ffffff",
+			correctLevel: QRCode.CorrectLevel.H,
+		});
+
+		// 결과 요소에 QR 코드 추가
+		resultElement.style.position = "relative";
+		resultElement.appendChild(qrDiv);
+
+		// 이미지 생성
+		const canvas = await html2canvas(resultElement, {
+			backgroundColor: getComputedStyle(document.body).getPropertyValue(
+				"--container-bg",
+			),
 			scale: 2,
 		});
 
-		// 버튼들 다시 표시
-		buttons.forEach((button) => (button.style.display = "block"));
+		// QR 코드 제거 (원래 상태로 복구)
+		resultElement.removeChild(qrDiv);
 
 		// Canvas를 Blob으로 변환
-		canvas.toBlob(async (blob) => {
-			try {
-				// Blob을 File로 변환
-				const file = new File([blob], "chill-guy-result.png", {
-					type: "image/png",
-				});
+		const blob = await new Promise((resolve) =>
+			canvas.toBlob(resolve, "image/png"),
+		);
 
-				// Instagram 스토리 공유 딥링크 생성
-				if (
-					navigator.share &&
-					navigator.canShare &&
-					navigator.canShare({ files: [file] })
-				) {
-					await navigator.share({
-						files: [file],
-						title: "Chill Guy 측정 결과",
-						text: "나의 Chill Guy 지수는?",
-					});
-				} else {
-					// 모바일이 아니거나 공유가 지원되지 않는 경우
-					const downloadLink = document.createElement("a");
-					downloadLink.href = URL.createObjectURL(blob);
-					downloadLink.download = "chill-guy-result.png";
-					downloadLink.click();
+		// Instagram Story 공유
+		const instagramURL = `instagram://story-camera?media=${encodeURIComponent(URL.createObjectURL(blob))}`;
+		window.location.href = instagramURL;
 
-					// Instagram 앱으로 이동
-					const instagramURL = "instagram://story-camera";
-					window.location.href = instagramURL;
+		// 앱이 없는 경우 대체 메시지
+		setTimeout(() => {
+			if (document.hidden) return;
+			alert(translations[currentLang].shareErrors.instagramRequired);
+		}, 2000);
 
-					// 만약 Instagram 앱이 설치되어 있지 않다면 스토어로 이동
-					setTimeout(() => {
-						window.location.href =
-							"https://apps.apple.com/app/instagram/id389801252";
-					}, 2000);
-				}
-			} catch (error) {
-				console.error("Instagram 공유 중 오류 발생:", error);
-				alert(
-					"Instagram 공유에 실패했습니다. 이미지를 저장한 후 직접 공유해주세요.",
-				);
-			}
-		}, "image/png");
+		closeShareModal();
 	} catch (error) {
-		console.error("이미지 생성 중 오류 발생:", error);
-		alert("이미지 생성에 실패했습니다. 다시 시도해주세요.");
+		console.error("Instagram Story 공유 중 오류:", error);
+		alert(translations[currentLang].shareErrors.instagramFailed);
 	}
 }
 
@@ -715,3 +806,58 @@ function toggleTheme() {
 // 페이지 로드 시 저장된 테마 적용
 const savedTheme = localStorage.getItem("theme") || "light";
 document.documentElement.setAttribute("data-theme", savedTheme);
+
+// 모달 관련 함수 추가
+function openShareModal() {
+	const modal = document.getElementById("shareModal");
+	modal.style.display = "flex";
+	document.body.style.overflow = "hidden"; // body 스크롤 막기
+
+	// 모달 외부 클릭시 닫기
+	modal.addEventListener("click", (e) => {
+		if (e.target === modal) {
+			closeShareModal();
+		}
+	});
+}
+
+function closeShareModal() {
+	document.getElementById("shareModal").style.display = "none";
+	document.body.style.overflow = ""; // body 스크롤 복구
+}
+
+// X(Twitter) 공유 함수 추가
+function shareToX() {
+	const resultData = getResultData();
+	const score = totalScore;
+	const text =
+		currentLang === "ko"
+			? `[Chill Guy 측정기]\n\n나의 Chill Guy 점수는 ${score}점!\n${resultData.text}\n\n테스트 하러가기 👇`
+			: `[Chill Guy Test]\n\nMy Chill Guy score is ${score}!\n${resultData.text}\n\nTake the test 👇`;
+
+	const url = "https://chill-guy.limcpf.com";
+	const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+
+	// 새 창에서 X 공유 페이지 열기
+	window.open(shareUrl, "_blank", "width=600,height=400");
+	closeShareModal();
+}
+
+// 정보 모달 관련 함수 추가
+function openInfoModal() {
+	const modal = document.getElementById("infoModal");
+	modal.style.display = "flex";
+	document.body.style.overflow = "hidden"; // body 스크롤 막기
+
+	// 모달 외부 클릭시 닫기
+	modal.addEventListener("click", (e) => {
+		if (e.target === modal) {
+			closeInfoModal();
+		}
+	});
+}
+
+function closeInfoModal() {
+	document.getElementById("infoModal").style.display = "none";
+	document.body.style.overflow = ""; // body 스크롤 복구
+}

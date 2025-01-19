@@ -28,6 +28,7 @@
   <title>Chill Guy 측정기</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
   <div class="topbar">
@@ -51,7 +52,12 @@
 
   <main>
     <div id="start-container">
-      <h1 class="title">Chill Guy 측정기</h1>
+      <div class="title-container">
+        <h1 class="title">Chill Guy 측정기</h1>
+        <button class="info-button" onclick="openInfoModal()">
+          <i class="fas fa-question-circle"></i>
+        </button>
+      </div>
       <button class="start-button" onclick="startQuiz()">측정</button>
     </div>
 
@@ -69,8 +75,43 @@
           onload="this.classList.add('loaded'); this.parentElement.classList.remove('skeleton')"
         >
       </div>
-      <button class="result-button" onclick="restartQuiz()">다시 시작하기</button>
-      <button class="result-button share-button" onclick="shareToInstagramStory()">Instagram Story 공유</button>
+      <div class="button-group">
+        <button class="result-button" onclick="restartQuiz()">다시 시작하기</button>
+        <button class="result-button" onclick="openShareModal()">공유하기</button>
+      </div>
+    </div>
+
+    <!-- 공유 모달 (result div 밖으로 이동) -->
+    <div id="shareModal" class="modal">
+      <div class="modal-content">
+        <h3>공유하기</h3>
+        <div class="share-buttons">
+          <button class="icon-button" onclick="shareToInstagramStory()" title="Instagram Story 공유">
+            <i class="fab fa-instagram"></i>
+          </button>
+          <button class="icon-button" onclick="shareToX()" title="X에 공유하기">
+            <i class="fab fa-x-twitter"></i>
+          </button>
+          <button class="icon-button" onclick="saveImage()" title="이미지 저장">
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
+        <button class="modal-close" onclick="closeShareModal()">닫기</button>
+      </div>
+    </div>
+
+    <!-- 정보 모달 추가 -->
+    <div id="infoModal" class="modal">
+      <div class="modal-content">
+        <h3>About Chill Guy</h3>
+        <div class="info-text">
+          <p>'Chill Guy'는 2024년 초 한국에서 유행하기 시작한 밈으로, 모든 상황에서 여유롭고 평화로운 태도를 보이는 사람을 일컫는 말입니다.</p>
+          <p>이 테스트는 해당 밈을 재미있게 해석한 팬 콘텐츠입니다.</p>
+          <p>만약 저작권 등 문제가 있다고 판단되시면, 아래 이메일로 연락 주시기 바랍니다. 최대한 신속하게 조치하도록 하겠습니다.</p>
+          <p class="contact-email">📧 daeseong0226@gmail.com</p>
+        </div>
+        <button class="modal-close" onclick="closeInfoModal()">닫기</button>
+      </div>
     </div>
   </main>
 
@@ -90,6 +131,7 @@
   </footer>
 
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
