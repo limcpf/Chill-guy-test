@@ -666,23 +666,34 @@ async function shareToInstagramStory() {
 		// 버튼 다시 보이게 하기
 		buttons.forEach((button) => (button.style.display = "block"));
 
-		// Canvas를 Blob으로 변환
+		// Canvas를 Blob으로 변환하고 파일로 만들기
 		const blob = await new Promise((resolve) =>
 			canvas.toBlob(resolve, "image/png"),
 		);
+		const file = new File([blob], "chill-guy-result.png", {
+			type: "image/png",
+		});
 
-		// Blob URL 생성
-		const blobUrl = URL.createObjectURL(blob);
+		// 파일을 공유하기 위해 Web Share API 사용
+		if (navigator.share) {
+			await navigator.share({
+				files: [file],
+				title: "Chill Guy Test Result",
+				text:
+					currentLang === "ko"
+						? `나의 Chill Guy 점수는 ${totalScore}점!\n테스트 하러가기 👉 https://chill-guy.limcpf.com`
+						: `My Chill Guy score is ${totalScore}!\nTake the test 👉 https://chill-guy.limcpf.com`,
+			});
+		} else {
+			// Web Share API를 지원하지 않는 경우 대체 방법
+			const instagramURL = "instagram://story-camera";
+			window.location.href = instagramURL;
 
-		// Instagram Story 딥링크 생성
-		const instagramURL = `instagram-stories://share?source_application=chill-guy&media=${encodeURIComponent(blobUrl)}`;
-		window.location.href = instagramURL;
-
-		// 앱이 없는 경우 대체 메시지
-		setTimeout(() => {
-			if (document.hidden) return;
-			alert(translations[currentLang].shareErrors.instagramRequired);
-		}, 2000);
+			setTimeout(() => {
+				if (document.hidden) return;
+				alert(translations[currentLang].shareErrors.instagramRequired);
+			}, 2000);
+		}
 
 		closeShareModal();
 	} catch (error) {
