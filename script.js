@@ -646,35 +646,14 @@ async function saveImage() {
 	}
 }
 
-// Instagram Story 공유 함수
+// Instagram Story 공유 함수 수정
 async function shareToInstagramStory() {
 	try {
 		const resultElement = document.getElementById("result");
 
-		// QR 코드 생성을 위한 임시 div 생성
-		const qrDiv = document.createElement("div");
-		qrDiv.style.position = "absolute";
-		qrDiv.style.right = "20px";
-		qrDiv.style.bottom = "20px";
-		qrDiv.style.width = "80px";
-		qrDiv.style.height = "80px";
-		qrDiv.style.backgroundColor = "white";
-		qrDiv.style.padding = "5px";
-		qrDiv.style.borderRadius = "8px";
-
-		// QR 코드 생성
-		new QRCode(qrDiv, {
-			text: "https://chill-guy.limcpf.com",
-			width: 80,
-			height: 80,
-			colorDark: "#000000",
-			colorLight: "#ffffff",
-			correctLevel: QRCode.CorrectLevel.H,
-		});
-
-		// 결과 요소에 QR 코드 추가
-		resultElement.style.position = "relative";
-		resultElement.appendChild(qrDiv);
+		// 버튼 숨기기 (이미지에 포함되지 않도록)
+		const buttons = document.querySelectorAll(".result-button");
+		buttons.forEach((button) => (button.style.display = "none"));
 
 		// 이미지 생성
 		const canvas = await html2canvas(resultElement, {
@@ -684,16 +663,19 @@ async function shareToInstagramStory() {
 			scale: 2,
 		});
 
-		// QR 코드 제거 (원래 상태로 복구)
-		resultElement.removeChild(qrDiv);
+		// 버튼 다시 보이게 하기
+		buttons.forEach((button) => (button.style.display = "block"));
 
 		// Canvas를 Blob으로 변환
 		const blob = await new Promise((resolve) =>
 			canvas.toBlob(resolve, "image/png"),
 		);
 
-		// Instagram Story 공유
-		const instagramURL = `instagram://story-camera?media=${encodeURIComponent(URL.createObjectURL(blob))}`;
+		// Blob URL 생성
+		const blobUrl = URL.createObjectURL(blob);
+
+		// Instagram Story 딥링크 생성
+		const instagramURL = `instagram-stories://share?source_application=chill-guy&media=${encodeURIComponent(blobUrl)}`;
 		window.location.href = instagramURL;
 
 		// 앱이 없는 경우 대체 메시지
