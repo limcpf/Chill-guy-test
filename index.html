@@ -254,7 +254,7 @@
   </div>
 
   <audio id="bgm" loop>
-    <source src="background.mp3" type="audio/mp3">
+    <source src="background.mp3" type="audio/mp3" preload="auto" autoplay>
   </audio>
 
   <div id="start-container">
@@ -328,7 +328,7 @@
           },
           {
             question: "길가다가 발에 껌이 붙었습니다. 당신의 반응은?",
-            image: "q5.webp",
+            image: "q5.avif",
             options: [
               { text: "이것도 인생의 일부지 뭐~ 천천히 떼면 되지", score: 3 },
               { text: "귀찮네~ 그래도 어쩔 수 없지", score: 2 },
@@ -584,7 +584,7 @@
           ${questionNumber} ${currentQuestion.question}
         </div>
         <div class="question-image">
-          <!-- 이미지가 있다면 여기에 추가 -->
+          <img src="${currentQuestion.image}" alt="Question Image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
         </div>
         ${shuffledOptions
           .map(
@@ -700,6 +700,39 @@
         alert('이미지 저장에 실패했습니다. 다시 시도해주세요.');
       }
     }
+
+    // BGM 관련 코드 추가
+    const bgm = document.getElementById('bgm');
+    const musicToggle = document.getElementById('musicToggle');
+    let isMusicPlaying = false;
+
+    // BGM 토글 함수
+    function toggleMusic() {
+        if (isMusicPlaying) {
+            bgm.pause();
+            musicToggle.textContent = '🔈X';
+        } else {
+            bgm.play();
+            musicToggle.textContent = '🔊';
+        }
+        isMusicPlaying = !isMusicPlaying;
+    }
+
+    // 페이지 로드 시 자동 재생
+    window.addEventListener('load', () => {
+        bgm.volume = 0.5; // 볼륨 50%로 설정
+        // 사용자 상호작용 필요한 브라우저를 위한 클릭 이벤트 리스너
+        document.addEventListener('click', () => {
+            if (!isMusicPlaying) {
+                bgm.play();
+                isMusicPlaying = true;
+                musicToggle.textContent = '🔊';
+            }
+        }, { once: true });
+    });
+
+    // 음악 토글 버튼에 이벤트 리스너 추가
+    musicToggle.addEventListener('click', toggleMusic);
   </script>
 </body>
 </html>
