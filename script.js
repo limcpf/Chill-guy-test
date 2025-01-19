@@ -358,7 +358,14 @@ const translations = {
 	},
 };
 
-let currentLang = "ko";
+// currentLang 초기값을 브라우저 언어에 따라 설정하는 함수 추가
+function getInitialLanguage() {
+	const browserLang = navigator.language || navigator.userLanguage;
+	return browserLang.startsWith("ko") ? "ko" : "en";
+}
+
+// currentLang 변수 초기화 수정
+let currentLang = getInitialLanguage();
 
 // 언어 변경 함수
 function changeLanguage(lang) {
@@ -595,6 +602,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// 초기 언어 설정에 따른 텍스트 업데이트
 	updateTexts();
+
+	// 초기 언어 설정에 따라 언어 버튼 활성화
+	document.querySelectorAll(".language-btn").forEach((btn) => {
+		btn.classList.toggle("active", btn.dataset.lang === currentLang);
+	});
 });
 
 // 퀴즈 시작 함수 수정
