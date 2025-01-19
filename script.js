@@ -7,12 +7,11 @@ const translations = {
 		saveButton: "결과 저장하기",
 		questions: [
 			{
-				question:
-					"당신은 선풍기 바람이 직방으로 오지 않아 땀이 흐르고 있습니다. 어떻게 대처하시겠습니까?",
+				question: "선풍기 바람이 나에게 까지 닿지않아...어떻게 해야할까?",
 				image: "q1.webp",
 				options: [
 					{
-						text: "그냥 더운 건 자연의 일부라고 생각하며 땀을 흘린다. 이것이 여름이다.",
+						text: "땀을 흘리자. 여름이니까",
 						score: 3,
 					},
 					{
@@ -20,31 +19,30 @@ const translations = {
 						score: 2,
 					},
 					{
-						text: "가까운 부채를 찾아들고 천천히 부채질한다. 천천히.",
+						text: "손에 부채를 들고 천천히 부채질한다. 천천히.",
 						score: 1,
 					},
 					{
-						text: "땀을 닦으며 창문을 열고 밖을 본다. 멍 때리는 게 최고다.",
+						text: "땀을 닦으며, 창밖을 바라본다.",
 						score: 0,
 					},
 				],
 			},
 			{
-				question: "친구가 약속 시간에 30분이나 늦었습니다. 당신의 반응은?",
+				question: "만나기로한 친구가 30분이나 지각했다.",
 				image: "q2.webp",
 				options: [
 					{
-						text: "괜찮아, 나도 방금 왔어~ (사실 제시간에 도착했다)",
+						text: "이제 움직이자",
 						score: 3,
 					},
 					{ text: "기다리는 동안 여유롭게 음악을 듣고 있었어", score: 2 },
 					{ text: "커피 한 잔 마시면서 기다리고 있었어", score: 1 },
-					{ text: "다음부턴 일찍 와줬으면 좋겠다~ (웃으며)", score: 0 },
+					{ text: "다음부터 일찍 왔으면 해", score: 0 },
 				],
 			},
 			{
-				question:
-					"일이 너무 많아 야근을 해야 할 것 같습니다. 어떻게 하시겠습니까?",
+				question: "일이 너무 많아 야근을 해야 할 것 같다.",
 				image: "q3.webp",
 				options: [
 					{ text: "내일의 나에게 선물을 주자. 오늘은 집에 간다", score: 3 },
@@ -54,25 +52,25 @@ const translations = {
 				],
 			},
 			{
-				question: "주말에 갑자기 약속이 취소되었습니다. 당신은?",
+				question: "주말에 갑자기 약속이 취소되었다.",
 				image: "q4.webp",
 				options: [
-					{ text: "오히려 좋아. 집이 최고야", score: 3 },
+					{ text: "나와의 약속을 잡고 침대에 눕는다.", score: 3 },
 					{ text: "좋은 기회군. 나만의 시간을 가지자", score: 2 },
 					{ text: "다른 친구를 만날까? 아니야, 그냥 쉬자", score: 1 },
 					{ text: "다음을 기약하며 넷플릭스를 본다", score: 0 },
 				],
 			},
 			{
-				question: "길가다가 발에 껌이 붙었습니다. 당신의 반응은?",
+				question: "길가다가 발에 껌이 붙었다.",
 				image: "q5.avif",
 				imageBy: {
 					name: "TikTok",
 					url: "https://www.tiktok.com/@y2mmem/video/7442305398587034912",
 				},
 				options: [
-					{ text: "이것도 인생의 일부지 뭐~ 천천히 떼면 되지", score: 3 },
-					{ text: "귀찮네~ 그래도 어쩔 수 없지", score: 2 },
+					{ text: "껌과의 인연을 받아들인다", score: 3 },
+					{ text: "귀찮지만 그래도 어쩔 수 없지", score: 2 },
 					{ text: "근처 편의점에서 물티슈를 사자", score: 1 },
 					{ text: "아... 짜증나네. 빨리 떼야겠다", score: 0 },
 				],
@@ -81,8 +79,8 @@ const translations = {
 				question: "퇴근길에 엄청난 traffic jam에 걸렸습니다. 당신은?",
 				image: "q6.webp",
 				options: [
-					{ text: "차가 막히네~ 음악이나 들으면서 가자", score: 3 },
-					{ text: "이 시간에 명상이나 해볼까?", score: 2 },
+					{ text: "음악 소리를 키운다.", score: 3 },
+					{ text: "명상을 한다.", score: 2 },
 					{ text: "우회도로를 찾아보자. 천천히", score: 1 },
 					{ text: "다음부턴 이 시간은 피해서 가야지", score: 0 },
 				],
@@ -101,7 +99,7 @@ const translations = {
 		],
 		results: {
 			score21: {
-				text: "✨ 세상 모든 게 Fine해. 네 주변은 언제나 Chill한 에너지로 가득해",
+				text: "세상 모든 게 Fine해. 네 주변은 언제나 Chill한 에너지로 가득해",
 				image: "score21.webp",
 			},
 			score20: {
@@ -133,7 +131,7 @@ const translations = {
 				image: "score4.webp",
 			},
 			score0: {
-				text: "⚡ 열정 가득한 게 Fine해. 그래도 마음만은 언제나 Chill",
+				text: "⚡ 열정 가득한 게 Fine해. 당신은 Chill...dren",
 				image: "score0.webp",
 			},
 		},
@@ -145,48 +143,42 @@ const translations = {
 		saveButton: "Save Result",
 		questions: [
 			{
-				question:
-					"You're sweating because the fan isn't blowing directly at you. How do you handle it?",
+				question: "The fan's breeze doesn't reach you... What would you do?",
 				image: "q1.webp",
 				options: [
 					{
-						text: "Just sweat it out. Sweating is part of nature. This is summer.",
+						text: "Let's sweat. It's summer after all",
 						score: 3,
 					},
 					{
-						text: "Move near the fan naturally to catch the breeze. Like the flow of the universe.",
+						text: "Move closer to the fan and naturally catch the breeze. Like the flow of the universe.",
 						score: 2,
 					},
 					{
-						text: "Find a nearby hand fan and fan yourself slowly. Take it easy.",
+						text: "Hold a hand fan and fan myself slowly. Slowly.",
 						score: 1,
 					},
 					{
-						text: "Wipe off the sweat and open the window to space out. That's the best.",
+						text: "Wipe off the sweat and look out the window.",
 						score: 0,
 					},
 				],
 			},
 			{
-				question:
-					"Your friend is 30 minutes late for the appointment. How do you react?",
+				question: "Your friend is 30 minutes late for the meeting.",
 				image: "q2.webp",
 				options: [
 					{
-						text: "It's okay, I just got here too~ (Actually arrived on time)",
+						text: "Let's start moving now",
 						score: 3,
 					},
 					{ text: "I was just enjoying some music while waiting", score: 2 },
 					{ text: "I was having a coffee while waiting", score: 1 },
-					{
-						text: "Hope you can come earlier next time~ (with a smile)",
-						score: 0,
-					},
+					{ text: "Hope you can come earlier next time", score: 0 },
 				],
 			},
 			{
-				question:
-					"You might need to work overtime due to too much work. What would you do?",
+				question: "You might need to work overtime due to too much work.",
 				image: "q3.webp",
 
 				options: [
@@ -206,12 +198,11 @@ const translations = {
 				],
 			},
 			{
-				question:
-					"Your weekend plans got suddenly canceled. What's your reaction?",
+				question: "Your weekend plans got suddenly canceled.",
 				image: "q4.webp",
 
 				options: [
-					{ text: "Even better. Home is the best", score: 3 },
+					{ text: "Make a date with myself and lie in bed", score: 3 },
 					{ text: "Good opportunity. Let's have some me time", score: 2 },
 					{
 						text: "Should I meet another friend? Nah, let's just rest",
