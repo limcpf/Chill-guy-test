@@ -651,3 +651,32 @@ main {
 .info-text::-webkit-scrollbar-thumb:hover {
 	background: var(--button-bg);
 }
+
+/* 프로그레스 바 컨테이너 */
+.progress-bar-container {
+	width: 100%;
+	padding: 10px 0;
+	margin-bottom: 20px;
+}
+
+/* 프로그레스 바 */
+.progress-bar {
+	height: 4px;
+	background: var(--button-bg);
+	transition: width 0.3s ease;
+	margin: 0 auto;
+	border-radius: 2px;
+}
+
+/* 진행 상황 텍스트 */
+.progress-text {
+	text-align: center;
+	color: var(--text-color);
+	font-size: 14px;
+	margin-top: 5px;
+}
+
+/* 질문 컨테이너 여백 조정 */
+#quiz-container {
+	padding-top: 0;
+}

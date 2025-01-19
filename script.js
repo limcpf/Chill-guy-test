@@ -497,13 +497,13 @@ function selectOption(score) {
 		currentQuestionIndex++;
 
 		if (currentQuestionIndex < translations[currentLang].questions.length) {
-			renderQuestion();
+			showQuestion(currentQuestionIndex);
 			// 페이드 인 효과
 			quizContainer.classList.remove("fade-out");
 		} else {
 			showResult();
 		}
-	}, 300); // 트랜지션 시간과 동일하게 설정
+	}, 300);
 }
 
 // 결과 보여주기
@@ -608,7 +608,7 @@ function startQuiz() {
 	]);
 	currentQuestionIndex = 0;
 	totalScore = 0;
-	renderQuestion();
+	showQuestion(currentQuestionIndex);
 }
 
 // Instagram 공유 함수 추가
@@ -860,4 +860,58 @@ function openInfoModal() {
 function closeInfoModal() {
 	document.getElementById("infoModal").style.display = "none";
 	document.body.style.overflow = ""; // body 스크롤 복구
+}
+
+// showQuestion 함수 수정
+function showQuestion(index) {
+	const t = translations[currentLang];
+	const question = t.questions[index];
+
+	// 선택지 섞기
+	const shuffledOptions = shuffleArray([...question.options]);
+
+	// 프로그레스 바 업데이트
+	const progress = ((index + 1) / t.questions.length) * 100;
+	document.querySelector(".progress-bar").style.width = `${progress}%`;
+	document.querySelector(".progress-text").textContent =
+		`${index + 1}/${t.questions.length}`;
+
+	// 질문 번호 설정
+	const questionNumber =
+		index === t.questions.length - 1 ? "Chill." : `${index + 1}.`;
+
+	// 질문 컨테이너 내용 업데이트
+	quizContainer.innerHTML = `
+	  <div class="progress-bar-container">
+		<div class="progress-bar" style="width: ${progress}%"></div>
+		<div class="progress-text">${index + 1}/${t.questions.length}</div>
+	  </div>
+	  <div class="question">
+		${questionNumber} ${question.question}
+	  </div>
+	  <div class="question-image skeleton">
+		<img 
+		  src="${question.image}" 
+		  alt="Question Image" 
+		  style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;"
+		  onload="this.classList.add('loaded'); this.parentElement.classList.remove('skeleton')"
+		>
+	  </div>
+	  ${
+			question.imageBy
+				? `
+		<div class="image-credit">
+		  Image by <a href="${question.imageBy.url}" target="_blank" rel="noopener">${question.imageBy.name}</a>
+		</div>
+	  `
+				: ""
+		}
+	  ${shuffledOptions
+			.map(
+				(option) => `
+		<button class="option" onclick="selectOption(${option.score})">${option.text}</button>
+	  `,
+			)
+			.join("")}
+	`;
 }
