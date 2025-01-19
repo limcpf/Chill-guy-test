@@ -1,0 +1,418 @@
+/* 라이트 테마와 다크 테마를 위한 CSS 변수 */
+:root {
+	/* 라이트 테마 기본값 */
+	--bg-color: #e8f5e9;
+	--text-color: #2e7d32;
+	--container-bg: #f1f8e9;
+	--border-color: #aed581;
+	--option-bg: #dcedc8;
+	--option-hover: #c5e1a5;
+	--button-bg: #aed581;
+	--button-color: #33691e;
+	--topbar-bg: rgba(241, 248, 233, 0.95);
+	--skeleton-gradient: linear-gradient(
+		90deg,
+		#dcedc8 25%,
+		#e8f5e9 50%,
+		#dcedc8 75%
+	);
+}
+
+/* 다크 테마 */
+[data-theme="dark"] {
+	--bg-color: #1a1a1a;
+	--text-color: #a5d6a7;
+	--container-bg: #2d2d2d;
+	--border-color: #4caf50;
+	--option-bg: #3d3d3d;
+	--option-hover: #4a4a4a;
+	--button-bg: #4caf50;
+	--button-color: #e8f5e9;
+	--topbar-bg: rgba(45, 45, 45, 0.95);
+	--skeleton-gradient: linear-gradient(
+		90deg,
+		#3d3d3d 25%,
+		#2d2d2d 50%,
+		#3d3d3d 75%
+	);
+}
+
+/* 전체 페이지 스타일 */
+body {
+	font-family: "Comic Sans MS", sans-serif;
+	background: var(--bg-color);
+	color: var(--text-color);
+	margin: 0;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column; /* 세로 방향으로 요소들을 배치 */
+}
+
+/* 메인 컨텐츠 영역 */
+main {
+	flex: 1; /* 남은 공간을 모두 차지하도록 설정 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 20px 0;
+}
+
+/* 컨테이너: 모바일 화면 중앙 정렬 */
+#quiz-container,
+#result {
+	max-width: 430px; /* 아이폰 16 너비로 변경 */
+	width: calc(100% - 32px); /* 패딩을 고려한 전체 너비 */
+	margin: 20px auto;
+	padding: 24px 16px;
+	background: var(--container-bg);
+	border: 2px solid var(--border-color);
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	box-sizing: border-box; /* 패딩을 너비에 포함 */
+}
+
+/* 질문 텍스트 */
+.question {
+	font-size: 18px;
+	margin-bottom: 20px;
+	text-align: left;
+	line-height: 1.5;
+}
+
+/* 질문 이미지 컨테이너 수정 */
+.question-image {
+	width: 100%;
+	min-height: calc(100vw * 2.5 / 3); /* 최소 높이를 현재 비율로 설정 */
+	max-height: calc(100vw * 1.2); /* 너무 길어지지 않도록 제한 */
+	margin: 20px 0;
+	background-color: var(--option-bg);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+}
+
+.question-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain; /* cover에서 contain으로 변경하여 이미지가 잘리지 않도록 */
+	border-radius: 8px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.question-image img.loaded {
+	opacity: 1;
+}
+
+/* 보기 버튼 */
+.option {
+	display: block;
+	margin: 10px 0;
+	padding: 16px;
+	background: var(--option-bg);
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	width: 100%;
+	text-align: left;
+	color: var(--text-color);
+	opacity: 1;
+	transition: all 0.3s ease;
+}
+.option:hover {
+	background: var(--option-hover);
+	transform: translateX(5px);
+}
+
+/* 결과 창 */
+#result {
+	display: none;
+	max-width: 430px;
+	width: calc(100% - 32px);
+	margin: 20px auto;
+	padding: 24px 16px;
+	background: var(--container-bg);
+	border: 2px solid var(--border-color);
+	border-radius: 10px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+}
+
+.result-title {
+	font-size: 24px;
+	color: var(--text-color);
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+/* 결과 이미지 컨테이너 수정 */
+.result-image {
+	width: 100%;
+	min-height: calc(100vw * 2.5 / 3);
+	max-height: calc(100vw * 1.2);
+	margin: 20px 0;
+	background-color: var(--option-bg);
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+}
+
+.result-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	border-radius: 8px;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.result-image img.loaded {
+	opacity: 1;
+}
+
+.result-button {
+	display: block;
+	width: 100%;
+	padding: 16px;
+	background: var(--button-bg);
+	color: var(--button-color);
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background 0.3s ease;
+}
+
+.result-button:hover {
+	background: var(--option-hover);
+}
+
+.share-button {
+	margin-top: 8px;
+	background: #81c784; /* 약간 다른 녹색 계열로 구분 */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.share-button:hover {
+	background: #a5d6a7;
+}
+
+.share-button::before {
+	content: "📱";
+	font-size: 16px;
+}
+
+/* 시작 화면 스타일 */
+#start-container {
+	width: 100%;
+	min-height: calc(100vh - 40px - 80px); /* 헤더와 푸터 높이를 제외한 높이 */
+	background-image: url("background.webp"); /* 배경 이미지 추가 */
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding: 40px 20px;
+	box-sizing: border-box;
+}
+
+.title {
+	font-size: 32px;
+	font-weight: bold;
+	color: #fff; /* 배경 이미지에 따라 조절 필요 */
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+	margin-top: 40px;
+}
+
+.start-button {
+	background: var(--button-bg);
+	color: var(--button-color);
+	border: none;
+	padding: 15px 40px;
+	font-size: 20px;
+	border-radius: 25px;
+	cursor: pointer;
+	margin-bottom: 40px;
+	transition: background 0.3s ease;
+}
+
+.start-button:hover {
+	background: var(--option-hover);
+}
+
+/* 탑바 스타일 수정 */
+.topbar {
+	position: static; /* fixed에서 static으로 변경 */
+	height: 40px;
+	background: var(--topbar-bg);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 16px;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.language-switcher {
+	display: flex;
+	gap: 8px;
+	font-size: 14px;
+	color: var(--text-color);
+}
+
+.language-btn {
+	background: none;
+	border: none;
+	padding: 4px;
+	cursor: pointer;
+	color: var(--text-color);
+	opacity: 0.5;
+	font-size: 14px;
+}
+
+.language-btn.active {
+	opacity: 1;
+	font-weight: bold;
+}
+
+/* 점수 표시 스타일 추가 */
+.score-text {
+	font-size: 14px;
+	color: var(--text-color);
+	text-align: center;
+	margin-bottom: 12px;
+	opacity: 0.8;
+}
+
+/* 스켈레톤 로딩 애니메이션 스타일 추가 */
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+.skeleton {
+	background: var(--skeleton-gradient);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s infinite;
+}
+
+.topbar-left {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.music-guide {
+	font-size: 12px;
+	color: var(--text-color);
+	opacity: 0.8;
+}
+
+.music-button {
+	background: none;
+	border: none;
+	padding: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	color: var(--text-color);
+	transition: transform 0.2s ease;
+}
+
+.music-button:hover {
+	transform: scale(1.1);
+}
+
+/* 이미지 출처 스타일 추가 */
+.image-credit {
+	font-size: 10px;
+	color: var(--text-color);
+	opacity: 0.6;
+	text-align: right;
+	margin-top: 4px;
+	font-style: italic;
+}
+
+.image-credit a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.image-credit a:hover {
+	text-decoration: underline;
+}
+
+/* 푸터 스타일 수정 */
+.footer {
+	width: 100%;
+	padding: 10px 0; /* 기존 패딩값을 줄임 */
+	background: var(--topbar-bg);
+	border-top: 1px solid var(--border-color);
+	text-align: center;
+	position: static; /* fixed에서 static으로 변경 */
+	font-size: 12px;
+	color: var(--text-color);
+	box-sizing: border-box;
+}
+
+.footer-content {
+	max-width: 430px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.footer-links {
+	display: flex;
+	justify-content: center;
+	gap: 16px;
+}
+
+.footer a {
+	color: var(--text-color);
+	text-decoration: none;
+	transition: opacity 0.3s ease;
+}
+
+.footer a:hover {
+	opacity: 0.7;
+}
+
+/* 기존 컨테이너들의 하단 여백 수정 */
+#quiz-container,
+#result {
+	margin-bottom: 20px; /* 80px에서 20px로 변경 */
+}
+
+#start-container {
+	padding-bottom: 20px; /* 80px에서 20px로 변경 */
+}
+
+/* 테마 토글 버튼 추가 */
+.theme-toggle {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 1.2em;
+	padding: 0 5px;
+	vertical-align: middle;
+}
+
+.theme-toggle:hover {
+	opacity: 0.8;
+}
